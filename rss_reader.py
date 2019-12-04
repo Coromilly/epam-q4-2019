@@ -42,17 +42,17 @@ def creating_list_of_entries(thefeed):
     news_list = []
     for entry in entries:
         news = Content()
-        news.feed = thefeed.feed.get("title", "")
-        news.title = str(BeautifulSoup(entry.title, "html.parser"))
+        news.feed = thefeed.feed.get('title', '')
+        news.title = str(BeautifulSoup(entry.title, 'html.parser'))
         try:
-            news.date = str(BeautifulSoup(entry.published, "html.parser"))
+            news.date = str(BeautifulSoup(entry.published, 'html.parser'))
         except AttributeError:
             news.date = 'Date: this article has no date.'
         try:
             news.link = str(entry.link)
         except AttributeError:
             news.link = 'Link: this article has no link.'
-        content = BeautifulSoup(entry.summary, "html.parser")
+        content = BeautifulSoup(entry.summary, 'html.parser')
         news.content = content.text
         news_list.append(news)
     return news_list
@@ -60,7 +60,7 @@ def creating_list_of_entries(thefeed):
 
 def output(args, thefeed, news_list):
     """Outputing news"""
-    print('Feed: ', thefeed.feed.get("title", ""))
+    print('Feed: ', thefeed.feed.get('title', ''))
     if args.limit != 0:
         limit = args.limit
         for news in news_list[:limit]:
@@ -74,7 +74,7 @@ def output(args, thefeed, news_list):
 
 def convert_to_json(news_list, args, thefeed):
     news_list_json = []
-    feed = thefeed.feed.get("title", "")
+    feed = thefeed.feed.get('title', '')
     for news in news_list:
         news_dict = {
             feed: {
@@ -87,7 +87,7 @@ def convert_to_json(news_list, args, thefeed):
             }
         }
         news_list_json.append(news_dict)
-    if args.limit != 0:
+    if args.limit:
         limit = args.limit
         for news in news_list_json[:limit]:
             print(json.dumps(news, indent=4, ensure_ascii=False))
@@ -95,4 +95,8 @@ def convert_to_json(news_list, args, thefeed):
         print('Limit = 0, no news to print.')
     else:
         for news in news_list_json:
-            print(news)
+             print(news)
+
+def printing_version(args):
+    if args.version:
+        print('rss_reader, version 1.0')
