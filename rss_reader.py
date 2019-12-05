@@ -2,6 +2,7 @@ import argparse
 from bs4 import BeautifulSoup
 import feedparser
 import json
+import logging
 
 
 class Content:
@@ -95,8 +96,20 @@ def convert_to_json(news_list, args, thefeed):
         print('Limit = 0, no news to print.')
     else:
         for news in news_list_json:
-             print(news)
+            print(news)
+
 
 def printing_version(args):
     if args.version:
         print('rss_reader, version 1.0')
+
+
+def logger():
+    script_logger = logging.getLogger('rss_logger')
+    script_logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler()
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    script_logger.addHandler(ch)
+    return script_logger
