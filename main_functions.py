@@ -1,3 +1,6 @@
+"""This module contains main functions for rss_reader work.
+
+"""
 import argparse
 from bs4 import BeautifulSoup
 import feedparser
@@ -16,7 +19,7 @@ class Content:
         self.link = ''
         self.content = ''
 
-    def output(self):
+    def outputing(self):
         """Print entry to stdout."""
         print('\n' + 'Title: ' + self.title)
         print('Publication Date: ' + self.date)
@@ -61,7 +64,7 @@ def getting_arguments():
 
 def getting_feed(args, script_logger):
     """Simply getting unreadable feed from URL specified in 'source'."""
-    script_logger.info('Getting feed.')
+    script_logger.info('Getting feed.....')
     thefeed = feedparser.parse(args.source)
     script_logger.info('Feed was get successfully.')
     return thefeed
@@ -69,7 +72,7 @@ def getting_feed(args, script_logger):
 
 def creating_news_list(thefeed, script_logger):
     """Creating list of entry objects with readable news."""
-    script_logger.info('Creating list of news entries.')
+    script_logger.info('Creating list of news entries.....')
     entries = thefeed.entries
     news_list = []
     for entry in entries:
@@ -98,8 +101,11 @@ def creating_news_list(thefeed, script_logger):
 
 
 def limit_news_list(news_list, args, script_logger):
-    script_logger.info('Creating limit list of news entries.')
+    script_logger.info('Creating limit list of news entries.....')
     limit = args.limit
+    if limit == 0:
+        script_logger.info('List of news was created successfully.')
+        return news_list
     news_list = news_list[:limit]
     script_logger.info('Limit list of news was created successfully.')
     return news_list
@@ -108,9 +114,13 @@ def limit_news_list(news_list, args, script_logger):
 def output(news_list, thefeed, script_logger):
     """Output news."""
     script_logger.info('Please, read news.')
+    title_len = len(thefeed.feed.get('title', ''))
+    feed_len = len('Feed: ')
+    print('-' * (title_len + feed_len))
     print('Feed: ', thefeed.feed.get('title', ''))
+    print('-' * (title_len + feed_len))
     for news in news_list:
-        news.output()
+        news.outputing()
 
 
 def output_in_json(news_list, thefeed, script_logger):
@@ -131,11 +141,12 @@ def output_in_json(news_list, thefeed, script_logger):
         news_list_json.append(news_dict)
     script_logger.info('Please, read news in json format.')
     for news in news_list_json:
+        print('-' * 30)
         print(json.dumps(news, indent=4, ensure_ascii=False))
 
 
 def print_version(script_logger):
-    """Simply prints version of rss_reader.py script."""
-    script_logger.info('Check program version.')
+    """Simply prints version of main_functions.py script."""
+    script_logger.info('Check program version.....')
     print('rss_reader, version 1.0')
     sys.exit()
