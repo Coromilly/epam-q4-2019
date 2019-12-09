@@ -1,5 +1,17 @@
-"""This module contains main functions for rss_reader work.
+"""This module contains class and functions for rss_reader work.
 
+Class:
+class Content(object) has constructor for entry(news object) objects and method outputing() to print them to stdout
+
+Functions:
+logger(args) returns script_logger
+getting_arguments() returns args
+getting_feed(args, script_logger) returns thefeed
+creating_news_list(thefeed, script_logger) returns news_list
+limit_news_list(news_list, args, script_logger) returns news_list
+output(news_list, thefeed, script_logger) returns None
+output_in_json(news_list, thefeed, script_logger) returns None
+print_version(script_logger) returns version
 """
 import argparse
 from bs4 import BeautifulSoup
@@ -53,16 +65,13 @@ def logger(args):
 
 def getting_arguments():
     """Parsing arguments from command line."""
-    try:
-        parser = argparse.ArgumentParser(description='Pure Python command-line RSS reader.', add_help=True)
-        parser.add_argument('source', type=str, help='RSS URL')
-        parser.add_argument('--version', action='store_true', help='Print version info')
-        parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
-        parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
-        parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
-        args = parser.parse_args()
-    except BaseException:
-        raise Error('Invalid argument value.')
+    parser = argparse.ArgumentParser(description='Pure Python command-line RSS reader.', add_help=True)
+    parser.add_argument('source', type=str, help='RSS URL')
+    parser.add_argument('--version', action='store_true', help='Print version info')
+    parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
+    parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
+    parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
+    args = parser.parse_args()
     return args
 
 
@@ -155,6 +164,7 @@ def output_in_json(news_list, thefeed, script_logger):
 
 
 def print_version(script_logger):
-    """Simply prints version of main_functions.py script."""
+    """Simply prints version of rss_reader.py script."""
     script_logger.info('Check program version.....')
-    return 'rss_reader, version 1.0'
+    version = 'rss_reader, version 1.0'
+    return version

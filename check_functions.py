@@ -1,4 +1,14 @@
-"""This module contains different checks."""
+"""This module contains check functions.
+
+Class:
+class Error(Exceptions) is empty
+
+Functions:
+internet_connection_check(script_logger) returns True
+url_check(args, script_logger) returns True
+news_list_check(news_list, script_logger) returns True
+limit_arg_check(args, script_logger) returns True/False
+"""
 import requests
 
 
@@ -52,7 +62,6 @@ def news_list_check(news_list, script_logger):
 
 def limit_arg_check(args, script_logger):
     """Check the --limit argument."""
-    # script_logger.info('Checking --limit argument.....')
     limit = args.limit
     if not limit:
         if limit == 0:
