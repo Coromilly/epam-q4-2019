@@ -3,3 +3,4 @@ pydocstyle
 requests
 feedparser
 bs4
+mock

@@ -3,13 +3,13 @@
 """
 import argparse
 from bs4 import BeautifulSoup
+from check_functions import Error, limit_arg_check
 import feedparser
 import json
 import logging
-import sys
 
 
-class Content:
+class Content(object):
     """Determining functions to create empty entry(news object) and output it."""
 
     def __init__(self):
@@ -25,6 +25,7 @@ class Content:
         print('Publication Date: ' + self.date)
         print('Link: ' + self.link + '\n')
         print(self.content)
+        print('-' * 120)
 
 
 def logger(args):
@@ -52,13 +53,16 @@ def logger(args):
 
 def getting_arguments():
     """Parsing arguments from command line."""
-    parser = argparse.ArgumentParser(description='Pure Python command-line RSS reader.', add_help=True)
-    parser.add_argument('source', type=str, help='RSS URL')
-    parser.add_argument('--version', action='store_true', help='Print version info')
-    parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
-    parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
-    parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
-    args = parser.parse_args()
+    try:
+        parser = argparse.ArgumentParser(description='Pure Python command-line RSS reader.', add_help=True)
+        parser.add_argument('source', type=str, help='RSS URL')
+        parser.add_argument('--version', action='store_true', help='Print version info')
+        parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
+        parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
+        parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
+        args = parser.parse_args()
+    except BaseException:
+        raise Error('Invalid argument value.')
     return args
 
 
@@ -102,9 +106,16 @@ def creating_news_list(thefeed, script_logger):
 
 def limit_news_list(news_list, args, script_logger):
     script_logger.info('Creating limit list of news entries.....')
-    limit = args.limit
-    if limit == 0:
+    if not limit_arg_check(args, script_logger):
         script_logger.info('List of news was created successfully.')
+        return news_list
+    else:
+        if args.limit == 0:
+            script_logger.info('List of news was created successfully.')
+            return news_list
+        limit = args.limit
+    if len(news_list) < limit:
+        script_logger.warning('The number of news is less than --limit argument value.')
         return news_list
     news_list = news_list[:limit]
     script_logger.info('Limit list of news was created successfully.')
@@ -114,11 +125,9 @@ def limit_news_list(news_list, args, script_logger):
 def output(news_list, thefeed, script_logger):
     """Output news."""
     script_logger.info('Please, read news.')
-    title_len = len(thefeed.feed.get('title', ''))
-    feed_len = len('Feed: ')
-    print('-' * (title_len + feed_len))
+    print('-' * 120)
     print('Feed: ', thefeed.feed.get('title', ''))
-    print('-' * (title_len + feed_len))
+    print('-' * 120)
     for news in news_list:
         news.outputing()
 
@@ -141,12 +150,11 @@ def output_in_json(news_list, thefeed, script_logger):
         news_list_json.append(news_dict)
     script_logger.info('Please, read news in json format.')
     for news in news_list_json:
-        print('-' * 30)
+        print('-' * 120)
         print(json.dumps(news, indent=4, ensure_ascii=False))
 
 
 def print_version(script_logger):
     """Simply prints version of main_functions.py script."""
     script_logger.info('Check program version.....')
-    print('rss_reader, version 1.0')
-    sys.exit()
+    return 'rss_reader, version 1.0'
