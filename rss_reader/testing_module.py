@@ -21,12 +21,14 @@ class TestClassContent(unittest.TestCase):
         self.A.date = ['date', 1]
         self.A.link = {2: 'link'}
         self.A.content = []
+        self.images = (1, 'f')
 
     def test_class_content_init(self):
         self.assertEqual(self.A.title, 'title')
         self.assertEqual(self.A.date, ['date', 1])
         self.assertEqual(self.A.link, {2: 'link'})
         self.assertEqual(self.A.content, [])
+        self.assertEqual(self.A.images, (1, 'f'))
 
 
 class TestMainFunctions(unittest.TestCase):
