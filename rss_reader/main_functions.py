@@ -15,7 +15,8 @@ print_version(script_logger) returns version
 """
 import argparse
 from bs4 import BeautifulSoup
-from check_functions import limit_arg_check
+from check_functions import Error, limit_arg_check
+from datetime import datetime
 import feedparser
 import json
 import logging
@@ -30,6 +31,7 @@ class Content(object):
         self.date = ''
         self.link = ''
         self.content = ''
+        self.source = ''
         self.images = ''
 
     def outputing(self):
@@ -38,6 +40,7 @@ class Content(object):
         print('Publication Date: ' + self.date)
         print('Link: ' + self.link + '\n')
         print(self.content + '\n')
+        print('Source: ', self.source)
         print('Images: ', self.images)
         print('-' * 120)
 
@@ -73,6 +76,8 @@ def getting_arguments():
     parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
     parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
     parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
+    parser.add_argument('--date', type=str, help='Takes a date in %Y%m%d format. '
+                                                          'The cashed news from the specified day will be printed out')
     args = parser.parse_args()
     return args
 
@@ -115,6 +120,7 @@ def creating_news_list(thefeed, script_logger):
         except AttributeError:
             script_logger.warning('Current article has no images.')
             news.images = 'Images: this article has no images.'
+        news.source = thefeed.feed.get('link', '')
         news_list.append(news)
     script_logger.info('List of news was created successfully.')
     return news_list
@@ -175,3 +181,16 @@ def print_version(script_logger):
     script_logger.info('Check program version.....')
     version = 'rss_reader, version 2.0'
     return version
+
+
+def convert_date(args, script_logger):
+    """Converting date function.  """
+    try:
+        date = datetime.strptime(args.date, '%Y%m%d')
+        str_date = date.strftime("%d %b %Y")
+        if str_date[0] == '0':
+            str_date = str_date[1:]
+        return str_date
+    except ValueError:
+        script_logger.error('Wrong date format.')
+        raise Error('Input correct date argument')

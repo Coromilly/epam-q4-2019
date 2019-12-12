@@ -13,37 +13,47 @@ optional arguments:
   --verbose      Outputs verbose status messages
   --limit LIMIT  Limit news topics if this parameter provided
 """
-from main_functions import logger, getting_arguments, getting_feed, creating_news_list, limit_news_list
-from main_functions import output, output_in_json, print_version
-from check_functions import Error, internet_connection_check, limit_arg_check, news_list_check, url_check
+from cache_functions import caching_news, getting_cached_news_list
+from check_functions import date_arg_check, Error, internet_connection_check
+from check_functions import limit_arg_check, news_list_check, url_check
+from main_functions import logger, getting_arguments, getting_feed, convert_date, creating_news_list
+from main_functions import limit_news_list, output, output_in_json, print_version
 
 
 def main():
     try:
         args = getting_arguments()
         script_logger = logger(args)
+        thefeed = getting_feed(args, script_logger)
         if args.version:
             print(print_version(script_logger))
         else:
-            internet_connection_check(script_logger)
-            url_check(args, script_logger)
-            if limit_arg_check(args, script_logger):
-                thefeed = getting_feed(args, script_logger)
-                news_list = creating_news_list(thefeed, script_logger)
-                news_list_check(news_list, script_logger)
-                lim_news_lst = limit_news_list(news_list, args, script_logger)
-                if args.json:
-                    output_in_json(lim_news_lst, thefeed, script_logger)
-                else:
-                    output(lim_news_lst, thefeed, script_logger)
-            else:
-                thefeed = getting_feed(args, script_logger)
-                news_list = creating_news_list(thefeed, script_logger)
-                news_list_check(news_list, script_logger)
+            if args.date:
+                date = convert_date(args, script_logger)
+                news_list = getting_cached_news_list(date, args, script_logger)
                 if args.json:
                     output_in_json(news_list, thefeed, script_logger)
                 else:
                     output(news_list, thefeed, script_logger)
+            else:
+                internet_connection_check(script_logger)
+                url_check(args, script_logger)
+                if limit_arg_check(args, script_logger):
+                    news_list = creating_news_list(thefeed, script_logger)
+                    news_list_check(news_list, script_logger)
+                    caching_news(news_list, script_logger)
+                    lim_news_lst = limit_news_list(news_list, args, script_logger)
+                    if args.json:
+                        output_in_json(lim_news_lst, thefeed, script_logger)
+                    else:
+                        output(lim_news_lst, thefeed, script_logger)
+                else:
+                    news_list = creating_news_list(thefeed, script_logger)
+                    news_list_check(news_list, script_logger)
+                    if args.json:
+                        output_in_json(news_list, thefeed, script_logger)
+                    else:
+                        output(news_list, thefeed, script_logger)
     except Error as e:
         print(e)
 
