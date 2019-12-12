@@ -14,8 +14,8 @@ optional arguments:
   --limit LIMIT  Limit news topics if this parameter provided
 """
 from cache_functions import caching_news, getting_cached_news_list
-from check_functions import date_arg_check, Error, internet_connection_check
-from check_functions import limit_arg_check, news_list_check, url_check
+from check_functions import Error, internet_connection_check, limit_arg_check
+from check_functions import news_list_check, url_check
 from main_functions import logger, getting_arguments, getting_feed, convert_date, creating_news_list
 from main_functions import limit_news_list, output, output_in_json, print_version
 

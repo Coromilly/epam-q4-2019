@@ -32,6 +32,7 @@ class Content(object):
         self.link = ''
         self.content = ''
         self.source = ''
+        self.rss_link = ''
         self.images = ''
 
     def outputing(self):
@@ -77,7 +78,7 @@ def getting_arguments():
     parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
     parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
     parser.add_argument('--date', type=str, help='Takes a date in %Y%m%d format. '
-                                                          'The cashed news from the specified day will be printed out')
+                                                 'The cashed news from the specified day will be printed out')
     args = parser.parse_args()
     return args
 
@@ -103,23 +104,28 @@ def creating_news_list(thefeed, script_logger):
             news.date = str(BeautifulSoup(entry.published, 'html.parser'))
         except AttributeError:
             script_logger.warning('Current article has no date.')
-            news.date = 'Date: this article has no date.'
+            news.date = 'This article has no date.'
         try:
             news.link = str(entry.link)
         except AttributeError:
             script_logger.warning('Current article has no link.')
-            news.link = 'Link: this article has no link.'
+            news.link = 'This article has no link.'
         try:
             content = BeautifulSoup(entry.summary, 'html.parser')
             news.content = content.text
         except AttributeError:
             script_logger.warning('Current article has no content.')
-            news.content = 'Content: this article has no content.'
+            news.content = 'This article has no content.'
         try:
             news.images = entry.media_content[0]['url']
         except AttributeError:
             script_logger.warning('Current article has no images.')
-            news.images = 'Images: this article has no images.'
+            news.images = 'This article has no images.'
+        try:
+            news.rss_link = thefeed.feed.title_detail.get('base', '')
+        except AttributeError:
+            script_logger.warning('Current article has no \'rss_link\' key.')
+            news.rss = 'This article has no rss_link.'
         news.source = thefeed.feed.get('link', '')
         news_list.append(news)
     script_logger.info('List of news was created successfully.')

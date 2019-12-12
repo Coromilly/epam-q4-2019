@@ -35,8 +35,11 @@ def getting_cached_news_list(date, args, script_logger):
         for date_key in shelve_dict:
             if date in date_key:
                 news = shelve_dict[date_key]
-                # if args.source == news.source:
-                news_list.append(news)
+                if args.source == news.rss_link:
+                    news_list.append(news)
+                else:
+                    script_logger.error('There are no cached news for this link.')
+                    raise Error('Wrong link.')
     if not news_list:
         script_logger.error('There are no news in cached file at this date and source.')
         raise Error('There are no news in cached file. Input another date or source.')

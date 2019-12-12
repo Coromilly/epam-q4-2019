@@ -74,12 +74,3 @@ def limit_arg_check(args, script_logger):
         raise Error('Argument --limit should be positive.')
     else:
         return True
-
-
-def date_arg_check(args, script_logger):
-    """Check the --date argument"""
-    if args.date:
-        script_logger.info('Checking date argument.....')
-        return True
-    else:
-        return False
