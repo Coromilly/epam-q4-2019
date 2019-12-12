@@ -1,15 +1,16 @@
-"""  Module of caching functions.
-      Functions:
-      cache_news(news_collection, logger) -> None
-      get_cached_news(com_line_args, logger) -> cached_news_collection   """
+"""Module of caching functions.
 
-import shelve
-from os import path
-
+Functions:
+caching_news returns None
+getting_cached_news_list returns news_list
+"""
 from check_functions import Error, limit_arg_check
+from os import path
+import shelve
 
-DIRECTORY = path.abspath(path.dirname(__file__))
-path_to_file = path.join(DIRECTORY, '.cached_rss_news')
+
+directory = path.abspath(path.dirname(__file__))
+path_to_file = path.join(directory, '.cached_rss_news')
 
 
 def caching_news(news_list, script_logger):
@@ -22,7 +23,7 @@ def caching_news(news_list, script_logger):
     script_logger.info('RSS-news were cached successfully.')
 
 
-def getting_cached_news_list(date, args, script_logger):
+def getting_cached_news_list(args, script_logger):
     script_logger.info('Getting cached news.....')
     news_list = []
     with shelve.open(path_to_file) as shelve_dict:
@@ -33,7 +34,7 @@ def getting_cached_news_list(date, args, script_logger):
         else:
             limit = min(args.limit, len(shelve_dict))
         for date_key in shelve_dict:
-            if date in date_key:
+            if args.date in date_key:
                 news = shelve_dict[date_key]
                 if args.source == news.rss_link:
                     news_list.append(news)

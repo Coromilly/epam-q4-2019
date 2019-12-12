@@ -77,8 +77,9 @@ def getting_arguments():
     parser.add_argument('--json', action='store_true', help='Print result as JSON in stdout')
     parser.add_argument('--verbose', action='store_true', help='Outputs verbose status messages')
     parser.add_argument('--limit', type=int, help='Limit news topics if this parameter provided')
-    parser.add_argument('--date', type=str, help='Takes a date in %Y%m%d format. '
-                                                 'The cashed news from the specified day will be printed out')
+    parser.add_argument('--date', type=convert_date,
+                        help='Takes a date in %Y%m%d format. '
+                             'The cashed news from the specified day will be printed out')
     args = parser.parse_args()
     return args
 
@@ -120,7 +121,7 @@ def creating_news_list(thefeed, script_logger):
             news.images = entry.media_content[0]['url']
         except AttributeError:
             script_logger.warning('Current article has no images.')
-            news.images = 'This article has no images.'
+        news.images = 'This article has no images.'
         try:
             news.rss_link = thefeed.feed.title_detail.get('base', '')
         except AttributeError:
@@ -172,8 +173,10 @@ def output_in_json(news_list, thefeed, script_logger):
                 'Link': news.link,
                 'Content': [
                     news.content
-                ]
-            }
+                ],
+                'Source': news.source,
+                'Images': news.images
+             }
         }
         news_list_json.append(news_dict)
     script_logger.info('Please, read news in json format.')
@@ -189,14 +192,13 @@ def print_version(script_logger):
     return version
 
 
-def convert_date(args, script_logger):
-    """Converting date function.  """
+def convert_date(str_date):
+    """Converting date function."""
     try:
-        date = datetime.strptime(args.date, '%Y%m%d')
-        str_date = date.strftime("%d %b %Y")
+        datetime_obj = datetime.strptime(str_date, '%Y%m%d')
+        str_date = datetime_obj.strftime("%d %b %Y")
         if str_date[0] == '0':
             str_date = str_date[1:]
         return str_date
-    except ValueError:
-        script_logger.error('Wrong date format.')
+    except Exception:
         raise Error('Input correct date argument')

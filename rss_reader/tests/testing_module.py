@@ -21,13 +21,17 @@ class TestClassContent(unittest.TestCase):
         self.A.date = ['date', 1]
         self.A.link = {2: 'link'}
         self.A.content = []
-        self.images = (1, 'f')
+        self.A.source = 'https://www.yahoo.com/news'
+        self.A.rss_link = 'https://news.yahoo.com/rss/'
+        self.A.images = (1, 'f')
 
     def test_class_content_init(self):
         self.assertEqual(self.A.title, 'title')
         self.assertEqual(self.A.date, ['date', 1])
         self.assertEqual(self.A.link, {2: 'link'})
         self.assertEqual(self.A.content, [])
+        self.assertEqual(self.A.source, 'https://www.yahoo.com/news')
+        self.assertEqual(self.A.rss_link, 'https://news.yahoo.com/rss/')
         self.assertEqual(self.A.images, (1, 'f'))
 
 
@@ -72,6 +76,12 @@ class TestMainFunctions(unittest.TestCase):
         thefeed = feedparser.parse(feed)
         news_list = main_functions.creating_news_list(thefeed, self.script_logger)
         self.assertEqual(len(news_list), 1)
+
+    def test_convert_date(self):
+        self.assertEqual(main_functions.convert_date("20191211"), "11 Dec 2019")
+        self.assertEqual(main_functions.convert_date("20190205"), "5 Feb 2019")
+        with self.assertRaises(check_functions.Error):
+            main_functions.convert_date("2119")
 
 
 class TestCheckFunctions(unittest.TestCase):

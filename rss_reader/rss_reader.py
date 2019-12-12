@@ -29,8 +29,7 @@ def main():
             print(print_version(script_logger))
         else:
             if args.date:
-                date = convert_date(args, script_logger)
-                news_list = getting_cached_news_list(date, args, script_logger)
+                news_list = getting_cached_news_list(args, script_logger)
                 if args.json:
                     output_in_json(news_list, thefeed, script_logger)
                 else:
