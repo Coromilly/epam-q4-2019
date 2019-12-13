@@ -53,6 +53,7 @@ def main():
                         output_in_json(news_list, thefeed, script_logger)
                     else:
                         output(news_list, thefeed, script_logger)
+
     except Error as e:
         print(e)
 

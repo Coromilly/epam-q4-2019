@@ -121,7 +121,7 @@ def creating_news_list(thefeed, script_logger):
             news.images = entry.media_content[0]['url']
         except AttributeError:
             script_logger.warning('Current article has no images.')
-        news.images = 'This article has no images.'
+            news.images = 'This article has no images.'
         try:
             news.rss_link = thefeed.feed.title_detail.get('base', '')
         except AttributeError:

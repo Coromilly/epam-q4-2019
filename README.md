@@ -20,6 +20,8 @@ optional arguments:
 
 **--limit LIMIT**      Limit news topics if this parameter provided
 
+**--limit LIMIT**      Takes a date in %Y%m%d format. The cashed news from the specified day will be printed out
+
 ###JSON output structure example:
 
 <pre><code>{

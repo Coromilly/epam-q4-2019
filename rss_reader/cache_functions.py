@@ -31,6 +31,8 @@ def getting_cached_news_list(args, script_logger):
             raise Error('There are no cached news. You can read news from internet if the connection exists.')
         if not limit_arg_check(args, script_logger):
             limit = len(shelve_dict)
+        elif  args.limit == 0:
+            limit = len(shelve_dict)
         else:
             limit = min(args.limit, len(shelve_dict))
         for date_key in shelve_dict:
