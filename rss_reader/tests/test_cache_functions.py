@@ -1,4 +1,4 @@
-"""Module for testing caching functions."""
+"""This module contains unit tests for caching functions."""
 import cache_functions
 import check_functions
 import main_functions
