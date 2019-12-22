@@ -15,7 +15,7 @@ print_version(script_logger) returns version
 """
 import argparse
 from bs4 import BeautifulSoup
-from check_functions import Error, limit_arg_check
+from rss_reader.check_functions import Error, limit_arg_check
 from datetime import datetime
 import feedparser
 import json

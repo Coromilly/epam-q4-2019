@@ -1,5 +1,5 @@
 """This module contains unit tests for check functions."""
-import check_functions
+from rss_reader import check_functions
 import requests
 import unittest
 from unittest.mock import Mock, patch

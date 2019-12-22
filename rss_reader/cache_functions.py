@@ -4,7 +4,7 @@ Functions:
 caching_news returns None
 getting_cached_news_list returns news_list
 """
-from check_functions import Error, limit_arg_check
+from rss_reader.check_functions import Error, limit_arg_check
 from os import path
 import shelve
 

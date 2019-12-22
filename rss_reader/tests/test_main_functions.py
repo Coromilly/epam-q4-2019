@@ -1,7 +1,7 @@
 """This module contains unit tests for main functions."""
-from check_functions import Error
+from rss_reader.check_functions import Error
 import feedparser
-import main_functions
+from rss_reader import main_functions
 import unittest
 from unittest.mock import Mock, patch
 

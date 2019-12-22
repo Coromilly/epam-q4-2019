@@ -13,11 +13,11 @@ optional arguments:
   --verbose      Outputs verbose status messages
   --limit LIMIT  Limit news topics if this parameter provided
 """
-from cache_functions import caching_news, getting_cached_news_list
-from check_functions import Error, internet_connection_check, limit_arg_check
-from check_functions import news_list_check, url_check
-from main_functions import logger, getting_arguments, getting_feed, creating_news_list
-from main_functions import limit_news_list, output, output_in_json, print_version
+from rss_reader.cache_functions import caching_news, getting_cached_news_list
+from rss_reader.check_functions import Error, internet_connection_check, limit_arg_check
+from rss_reader.check_functions import news_list_check, url_check
+from rss_reader.main_functions import logger, getting_arguments, getting_feed, creating_news_list
+from rss_reader.main_functions import limit_news_list, output, output_in_json, print_version
 
 
 def main():

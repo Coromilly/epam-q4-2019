@@ -1,7 +1,7 @@
 """This module contains unit tests for caching functions."""
-import cache_functions
-import check_functions
-import main_functions
+from rss_reader import cache_functions
+from rss_reader import check_functions
+from rss_reader import main_functions
 import os
 import unittest
 from unittest import mock
